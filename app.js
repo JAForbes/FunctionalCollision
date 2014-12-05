@@ -1,34 +1,35 @@
-var vector = {
-  scale: function(scalar,vector){
-    return R.map(R.multiply(scalar),vector)
-  },
-  add: function(increment,vector){
-    return R.map(R.multiply(scalar),vector)
-  },
-  dot: function(a,b){
-    return a[0]*b[0] + a[1]*b[1]
-  },
-  magnitude: function(v){
-    return Math.sqrt(
-      v[0]*v[0] +
-      v[1]*v[1]
-    )
-  },
-  normalize: function(v){
-    return this.scale(this.magnitude(v),v)
-  },
-  project: function(a,b){
-    var magnitudeSquared = Math.pow(magnitude(b),2)
-    return R.scale(dot(a,b) / magnitudeSquared,b)
-  },
-  normalR: function(v){
-    return [
-      -v[1], v[0]
-    ]
-  },
-  normalL: function(v){
-    return [
-      v[1], -v[0]
-    ]
+con = can.getContext('2d')
+
+con.fillStyle = 'white'
+con.fillRect(0,0,can.width,can.height)
+
+
+con.translate(can.width/2,can.height/2)
+
+extend = function(a,b){
+  for(var key in b){
+    var val = b[key]
+    a[key] = val;
   }
+  return a;
 }
+
+drawPoints = function(points,style,openPath){
+  con.beginPath()
+  con.moveTo.apply(con,points[0])
+  R.map(function(point){
+    con.lineTo.apply(con,point)
+  },points.slice(1))
+  extend(con,style)
+  openPath || con.closePath()
+  con.stroke()
+  con.fill()
+
+}
+
+drawPoints([
+  [-100,-100],
+  [100,-100],
+  [100,100],
+  [-100,-100]
+],{strokeStyle: 'red', lineWidth: 20})
